@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycleConnect - Cycling Social App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #1abc9c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation */
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 150px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--white);
+            color: var(--primary);
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--text-light);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            text-align: center;
+        }
+        
+        /* Leaderboard Styles */
+        .leaderboard {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rank {
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .rank-1 {
+            background: #ffc107;
+        }
+        
+        .rank-2 {
+            background: #6c757d;
+        }
+        
+        .rank-3 {
+            background: #cd7f32;
+        }
+        
+        .rider-info {
+            flex-grow: 1;
+        }
+        
+        .rider-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .rider-distance {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Ride Stats Styles */
+        .ride-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        /* Equipment Store */
+        .equipment {
+            padding: 100px 0;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .equipment-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .equipment-img {
+            height: 200px;
+            background-color: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .equipment-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .equipment-card:hover .equipment-img img {
+            transform: scale(1.05);
+        }
+        
+        .equipment-info {
+            padding: 20px;
+        }
+        
+        .equipment-info h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .equipment-info p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        /* Equipment Showcase */
+        .equipment-showcase {
+            padding: 80px 0;
+            background-color: var(--light);
+            position: relative;
+        }
+        
+        .equipment-banner {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect width="800" height="400" fill="%233498db"/><text x="400" y="150" font-family="Arial" font-size="24" fill="white" text-anchor="middle">Equipment Marketplace</text><text x="400" y="190" font-family="Arial" font-size="18" fill="white" text-anchor="middle">Road Bike • Cycling Helmet • Cycling Shoes</text><text x="400" y="220" font-family="Arial" font-size="18" fill="white" text-anchor="middle">Cycling Jersey • Cycling Gloves • Bike Light Set</text><text x="400" y="250" font-family="Arial" font-size="18" fill="white" text-anchor="middle">Water Bottle</text></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .equipment-banner h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .equipment-banner p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 15px;
+        }
+        
+        /* Cycling Showcase */
+        .cycling-showcase {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .showcase-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 250px;
+            position: relative;
+        }
+        
+        .showcase-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .showcase-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .showcase-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            padding: 20px;
+        }
+        
+        .showcase-overlay h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: var(--shadow);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+            
+            .ride-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .equipment-banner {
+                height: 300px;
+                padding: 20px;
+            }
+            
+            .equipment-banner h2 {
+                font-size: 28px;
+            }
+            
+            .equipment-banner p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-bicycle"></i>
+                    <span>CycleConnect</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Core Features</a></li>
+                    <li><a href="#equipment">Equipment Store</a></li>
+                    <li><a href="#showcase">Ride Showcase</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <h1>Connect Rides, Share Journeys</h1>
+            <p>CycleConnect - The ultimate social cycling app designed for enthusiasts. Track every ride, share every journey, and explore the world with cyclists globally.</p>
+            <a href="#features" class="cta-button">Explore App</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Core Features</h2>
+                <p>Comprehensive cycling experience designed for enthusiasts</p>
+            </div>
+            <div class="features-grid">
+                <!-- Cycling Leaderboard -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-trophy"></i> Cycling Leaderboard</h3>
+                    <div class="leaderboard">
+                        <div class="leaderboard-item">
+                            <div class="rank rank-1">1</div>
+                            <div class="rider-info">
+                                <div class="rider-name">Emily Johnson</div>
+                                <div class="rider-distance">145.2 mi</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank rank-2">2</div>
+                            <div class="rider-info">
+                                <div class="rider-name">Mark Smith</div>
+                                <div class="rider-distance">132.8 mi</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank rank-3">3</div>
+                            <div class="rider-info">
+                                <div class="rider-name">Sarah Williams</div>
+                                <div class="rider-distance">128.6 mi</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">4</div>
+                            <div class="rider-info">
+                                <div class="rider-name">Michael Brown</div>
+                                <div class="rider-distance">118.9 mi</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">5</div>
+                            <div class="rider-info">
+                                <div class="rider-name">Jennifer Miller</div>
+                                <div class="rider-distance">112.5 mi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Personal Records -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-chart-line"></i> Personal Records</h3>
+                    <div class="ride-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">26.3 mi</div>
+                            <div class="stat-label">Ride Distance</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">2:15:07</div>
+                            <div class="stat-label">Ride Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">1,830 ft</div>
+                            <div class="stat-label">Elevation Gain</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">11.7 mph</div>
+                            <div class="stat-label">Average Speed</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Equipment Store -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-store"></i> Equipment Store</h3>
+                    <div class="equipment-grid" style="grid-template-columns: 1fr 1fr; margin-top: 15px;">
+                        <div class="equipment-card">
+                            <div class="equipment-img">
+                                <img src="cycling-helmet.jpg" alt="Cycling Helmet">
+                            </div>
+                            <div class="equipment-info">
+                                <h3>Cycling Helmet</h3>
+                                <div class="price">$129</div>
+                            </div>
+                        </div>
+                        <div class="equipment-card">
+                            <div class="equipment-img">
+                                <img src="cycling-shoes.jpg" alt="Cycling Shoes">
+                            </div>
+                            <div class="equipment-info">
+                                <h3>Cycling Shoes</h3>
+                                <div class="price">$89</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cycling Social -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-users"></i> Cycling Social</h3>
+                    <p style="margin-top: 15px; text-align: center;">Connect with cyclists worldwide, share your riding experiences, organize group rides, and discover new routes.</p>
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; text-align: center;">
+                            <i class="fas fa-user-friends" style="font-size: 40px; color: var(--primary); margin-bottom: 10px;"></i>
+                            <div style="font-weight: 600;">Join Cycling Community</div>
+                            <div style="font-size: 14px; color: var(--text-light);">Connect with 50,000+ cyclists</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Showcase -->
+    <section class="equipment-showcase">
+        <div class="container">
+            <div class="equipment-banner">
+                <h2>Equipment Marketplace</h2>
+                <p>Road Bike • Cycling Helmet • Cycling Shoes</p>
+                <p>Cycling Jersey • Cycling Gloves • Bike Light Set</p>
+                <p>Water Bottle</p>
+                <a href="#equipment" class="cta-button" style="margin-top: 20px;">Browse Equipment</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Store -->
+    <section class="equipment" id="equipment">
+        <div class="container">
+            <div class="section-title">
+                <h2>Equipment Store</h2>
+                <p>Premium cycling equipment to enhance your riding experience</p>
+            </div>
+            <div class="equipment-grid">
+                <div class="equipment-card">
+                    <div class="equipment-img">
+                        <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Road Bike">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Road Bike</h3>
+                        <p>Professional-grade road bicycle</p>
+                        <div class="price">$1,299</div>
+                    </div>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-img">
+                        <img src="cycling-helmet.jpg" alt="Cycling Helmet">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Cycling Helmet</h3>
+                        <p>Safe and comfortable helmet</p>
+                        <div class="price">$129</div>
+                    </div>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-img">
+                        <img src="cycling-shoes.jpg" alt="Cycling Shoes">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Cycling Shoes</h3>
+                        <p>Professional cycling shoes</p>
+                        <div class="price">$89</div>
+                    </div>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-img">
+                        <img src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cycling Jersey">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Cycling Jersey</h3>
+                        <p>Breathable professional jersey</p>
+                        <div class="price">$60</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cycling Showcase -->
+    <section class="cycling-showcase" id="showcase">
+        <div class="container">
+            <div class="section-title">
+                <h2>Ride Showcase</h2>
+                <p>Explore amazing cycling moments from riders worldwide</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Mountain Biking">
+                    <div class="showcase-overlay">
+                        <h3>Mountain Adventure</h3>
+                        <p>Challenge limits, conquer nature</p>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Road Cycling">
+                    <div class="showcase-overlay">
+                        <h3>Road Racing</h3>
+                        <p>Perfect combination of speed and passion</p>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Urban Cycling">
+                    <div class="showcase-overlay">
+                        <h3>Urban Exploration</h3>
+                        <p>Discover cycling joy in the city</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About Us</h3>
+                    <p>CycleConnect is dedicated to creating the best social cycling platform for enthusiasts worldwide, connecting every cycling lover.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Core Features</a></li>
+                        <li><a href="#equipment">Equipment Store</a></li>
+                        <li><a href="#showcase">Ride Showcase</a></li>
+                        <li><a href="#">Download App</a></li>
+                        <li><a href="#">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Cycling Avenue, Beijing</li>
+                        <li><i class="fas fa-phone"></i> +1 (800) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> contact@cycleconnect.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 CycleConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Close menu on mobile after click
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-links').classList.remove('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Mobile menu
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+
+        // Image error handling
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVxdWlwbWVudCBJbWFnZTwvdGV4dD48L3N2Zz4=';
+            });
+        });
+    </script>
+</body>
+</html>
